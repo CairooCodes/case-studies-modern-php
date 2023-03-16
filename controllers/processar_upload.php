@@ -1,4 +1,14 @@
 <?php
+require "../db_config.php";
+session_start();
+
+if (!isset($_SESSION['id'])) {
+  header('Location: ../login.php');
+  exit;
+}
+
+// obter o ID do usuário a partir do cookie ou da sessão
+$user_id = $_SESSION['id'] ?? null;
 
 // Verifica se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
