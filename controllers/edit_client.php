@@ -1,6 +1,6 @@
 <?php
 // Conectar ao banco de dados usando a classe PDO
-$pdo = new PDO('mysql:host=localhost;dbname=meubanco', 'root', 'root');
+$pdo = new PDO('mysql:host=localhost;dbname=miraceu', 'root', '');
 
 // Verificar se o ID do cliente foi enviado
 if (!empty($_GET['id'])) {
@@ -10,12 +10,12 @@ if (!empty($_GET['id'])) {
   // Verificar se o formulário foi enviado
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obter os dados do formulário
-    $nome = $_POST['nome'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    $name = $_POST['name'];
+    $price = $_POST['price'];
+    $categorie_id = $_POST['categorie_id'];
 
     // Atualizar o cliente
-    atualizarCliente($id, $nome, $email, $telefone);
+    atualizarCliente($id, $name, $price, $categorie);
 
     // Redirecionar para a página de lista de clientes
     header('Location: listar_clientes.php');
@@ -34,21 +34,20 @@ if (!empty($_GET['id'])) {
 function obterCliente($id)
 {
   global $pdo;
-  $stmt = $pdo->prepare("SELECT * FROM clientes WHERE id = :id");
+  $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
   $stmt->bindParam(':id', $id);
   $stmt->execute();
   return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 // Função para atualizar um cliente
-function atualizarCliente($id, $nome, $email, $telefone)
+function atualizarCliente($id, $name, $price, $categorie_id)
 {
   global $pdo;
-  $stmt = $pdo->prepare("UPDATE clientes SET nome = :nome, email = :email, telefone = :telefone WHERE id = :id");
-  $stmt->bindParam(':nome', $nome);
-  $stmt->bindParam(':email', $email);
-  $stmt->bindParam(':telefone', $telefone);
+  $stmt = $pdo->prepare("UPDATE products SET name = :name, price = :price, categorie_id = :categorie_id WHERE id = :id");
+  $stmt->bindParam(':name', $name);
+  $stmt->bindParam(':price', $price);
+  $stmt->bindParam(':categorie_id', $categorie_id);
   $stmt->bindParam(':id', $id);
   $stmt->execute();
 }
-?>
