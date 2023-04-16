@@ -2,54 +2,30 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>Exemplo TinyMCE</title>
-  <script src="https://cdn.tiny.cloud/1/4ui2d0fpugbkf5frqxp3bg458ubxg10wgyw7wzn86t8z1ojl/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-  <script>
-    tinymce.init({
-      selector: '#mytextarea',
-      plugins: 'image',
-      toolbar: 'image',
-      images_upload_handler: function(blobInfo, success, failure) {
-        var xhr, formData;
-
-        xhr = new XMLHttpRequest();
-        xhr.withCredentials = false;
-        xhr.open('POST', 'upload.php');
-
-        xhr.onload = function() {
-          var json;
-
-          if (xhr.status != 200) {
-            failure('HTTP Error: ' + xhr.status);
-            return;
-          }
-
-          json = JSON.parse(xhr.responseText);
-
-          if (!json || typeof json.location != 'string') {
-            failure('Invalid JSON: ' + xhr.responseText);
-            return;
-          }
-
-          success(json.location);
-        };
-
-        formData = new FormData();
-        formData.append('file', blobInfo.blob(), blobInfo.filename());
-
-        xhr.send(formData);
-      }
-    });
-  </script>
+  <title>TinyMCE com imagens salvas no banco de dados</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.10.2/tinymce.min.js" integrity="sha512-MbhLUiUv8Qel+cWFyUG0fMC8/g9r+GULWRZ0axljv3hJhU6/0B3NoL6xvnJPTYZzNqCQU3+TzRVxhkE531CLKg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
-  <form method="post" action="save.php">
-    <textarea id="mytextarea" name="content"></textarea>
-    <br>
-    <input type="submit" value="Salvar">
+
+  Copy code
+  <form action="salvar_postagem.php" method="post">
+    <label for="titulo">Título:</label>
+    <input type="text" name="titulo" id="titulo">
+
+    <label for="conteudo">Conteúdo:</label>
+    <textarea name="conteudo" id="conteudo"></textarea>
+
+    <button type="submit">Salvar</button>
   </form>
+
+  <script>
+    tinymce.init({
+      selector: '#conteudo',
+      plugins: 'print preview powerpaste casechange importcss tinydrive searchreplace autolink autosave save directionality advcode visualblocks visualchars fullscreen image link media mediaembed template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists checklist wordcount tinymcespellchecker a11ychecker imagetools textpattern noneditable help formatpainter permanentpen pageembed charmap tinycomments mentions quickbars linkchecker emoticons advtable export',
+      toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | a11ycheck ltr rtl | showcomments addcomment'
+    });
+  </script>
 </body>
 
 </html>
